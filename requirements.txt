@@ -28,6 +28,7 @@ pydantic_core==2.41.5
 pypika-tortoise==0.6.3
 python-dotenv==1.2.1
 python-jose==3.5.0
+python-multipart==0.0.20
 pytz==2025.2
 regex==2025.11.3
 rsa==4.9.1

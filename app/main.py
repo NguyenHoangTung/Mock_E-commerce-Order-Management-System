@@ -7,7 +7,7 @@ from .db_config import TORTOISE_ORM
 from dotenv import load_dotenv
 load_dotenv()
 
-app = FastAPI(title="E-commerce Order Management System")
+app = FastAPI(title="E-commerce Order Management System", swagger_ui_parameters={"persistAuthorization": True})
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 

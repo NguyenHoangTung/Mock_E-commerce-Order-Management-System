@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field, ConfigDict
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Any
 from datetime import datetime
 from uuid import UUID
+from app.models import Business
 
 class ProductCreate(BaseModel):
     name: str = Field(..., example="Laptop")
@@ -20,12 +21,19 @@ class ProductResponse(BaseModel):
     sale_price: Decimal
     stock: int
     image: Optional[str]
+    business: Any = Field(exclude=True)
     created_at: datetime
     updated_at: datetime
     business_id: UUID
 
-    class Config:
-        from_attributes = True
+    @computed_field
+    def business_name(self) -> str:
+        return self.business.name if self.business else "Unknown"
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        arbitrary_types_allowed=True
+    )
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = Field(None, example="Laptop")

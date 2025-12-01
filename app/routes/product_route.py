@@ -59,7 +59,7 @@ async def get_products(
         query = query.filter(sale_price__gte=min_price)
     if max_price is not None:   
         query = query.filter(sale_price__lte=max_price)
-    products = await query.offset(offset).limit(limit)
+    products = await query.limit(limit).offset(offset)
     return products
 
 @router.get("/products/{product_id}", response_model=ProductResponse)
@@ -78,6 +78,7 @@ async def update_product(
     update_data = product_update.dict(exclude_unset=True)
     for field, value in update_data.items():
         setattr(product, field, value)
+    product.is_active = True
     await product.save()
     return product
 

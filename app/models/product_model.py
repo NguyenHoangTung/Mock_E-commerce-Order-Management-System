@@ -12,6 +12,7 @@ class Product(models.Model):
     image = fields.CharField(max_length=200, null=True)
     created_at = fields.DatetimeField(default=datetime.utcnow)
     updated_at = fields.DatetimeField(auto_now=True)
+    is_active = fields.BooleanField(default=True)
     business = fields.ForeignKeyField("models.Business", related_name="products")
 
     def calculate_sale_price(self):

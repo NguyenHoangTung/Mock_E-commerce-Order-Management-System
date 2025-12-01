@@ -1,8 +1,9 @@
 import os
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
-from app.routes import user_router, business_router, upload_router
+from app.routes import user_router, business_router, upload_router, product_router
 from fastapi.staticfiles import StaticFiles
+from .db_config import TORTOISE_ORM
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -15,12 +16,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(business_router, prefix="/businesses", tags=["businesses"])
 app.include_router(upload_router, prefix="/upload", tags=["upload"])
+app.include_router(product_router, prefix="/products", tags=["products"])
 
 register_tortoise(
     app,
-    db_url=DATABASE_URL,
+    config=TORTOISE_ORM,
     modules={"models": ["app.models"]},
-    generate_schemas=True,
+    generate_schemas=False,
     add_exception_handlers=True,
 )
 

@@ -8,6 +8,8 @@ class Order(models.Model):
     total_amount = fields.DecimalField(max_digits=12, decimal_places=2, default=0)
     shipping_address = fields.TextField()
     created_at = fields.DatetimeField(auto_now_add=True)
+    transaction_id = fields.CharField(max_length=100, null=True)
+    paid_at = fields.DatetimeField(null=True)
     updated_at = fields.DatetimeField(auto_now=True)
     class Meta:
         table = "order"

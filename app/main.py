@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
-from app.routes import user_router, business_router, upload_router, product_router, order_router
+from app.routes import user_router, business_router, upload_router, product_router, order_router, payment_router
 from fastapi.staticfiles import StaticFiles
 from .db_config import TORTOISE_ORM
 from dotenv import load_dotenv
@@ -18,6 +18,7 @@ app.include_router(business_router, prefix="/businesses", tags=["businesses"])
 app.include_router(upload_router, prefix="/upload", tags=["upload"])
 app.include_router(product_router, prefix="/products", tags=["products"])
 app.include_router(order_router, prefix="/orders", tags=["orders"])
+app.include_router(payment_router, prefix="/payments", tags=["payments"])
 
 register_tortoise(
     app,

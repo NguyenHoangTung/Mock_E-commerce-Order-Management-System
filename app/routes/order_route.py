@@ -50,7 +50,7 @@ async def create_order(
             ))
 
         order.total_amount = total_bill
-        await order.save(using_db = connection)
+        await order.save(using_db=connection)
 
     return OrderResponse(
         id = order.id,

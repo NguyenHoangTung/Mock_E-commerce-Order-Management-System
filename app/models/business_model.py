@@ -12,3 +12,4 @@ class Business(models.Model):
     updated_at = fields.DatetimeField(auto_now=True)
     logo = fields.CharField(max_length=200, null=True)
     owner = fields.ForeignKeyField("models.User", related_name="business")
+    

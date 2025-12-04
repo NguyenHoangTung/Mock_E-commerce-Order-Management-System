@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from app.models import Order, User
 from app.utils.dependency import get_current_user
+from app.utils.email import send_confirmation_email
 import uuid
 from tortoise.transactions import in_transaction
 from datetime import datetime
@@ -79,7 +80,7 @@ async def gateway_page(order_id: str, amount: float):
     return html_content
 
 @router.post("/webhook")
-async def payment_webhook(payload: dict):
+async def payment_webhook(payload: dict, background_tasks: BackgroundTasks):
     if payload.get("secret_key") != PAYMENT_SECRET_KEY:
         raise HTTPException(status_code=403, detail="Invalid Signature.")
     
@@ -96,9 +97,17 @@ async def payment_webhook(payload: dict):
         order.status = "PAID"
         order.transaction_id = trans_id
         order.paid_at = datetime.utcnow()
-        await order.save()
-
-        return {"message": "The bill has been paid successfully!"}
+        await order.save()   
+   
+        if order.user and order.user.email:
+            background_tasks.add_task(
+                send_confirmation_email,
+                email = order.user.email,
+                username = order.user.username,
+                order_id = order.id,
+                total_amount = order.total_amount
+            )
+        return {"message": "The bill has been paid successfully! The confirmation email has been sent."}
     else:
         async with in_transaction() as connection:
             order.status = "CANCELLED"

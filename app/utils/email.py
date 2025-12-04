@@ -33,3 +33,26 @@ async def send_verification_email(email: EmailStr, token: str, username: str):
     )
     fm = FastMail(conf)
     await fm.send_message(message)
+
+async def send_confirmation_email(email: EmailStr, username: str, order_id: str, total_amount: float):
+    html = f"""
+    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd;">
+        <h2 style="color: #28a745;">Payment Successful!</h2>
+        <p>Greetings <strong>{username}</strong>,</p>
+        <p>Your Order <strong>#{order_id}</strong> has been confirmed.</p>
+        <hr/>
+        <p>With total payment: <strong style="font-size: 18px;">{total_amount:,.0f} VND</strong></p>
+        <p>We will soon finish the packaging and send the products to you.</p>
+        <br/>
+        <p>Thanks for buying!</p>
+    </div>
+    """
+
+    message = MessageSchema(
+        subject="Payment confirmation for Order {order_id}",
+        recipients=[email],
+        body=html,
+        subtype="html",
+    )
+    fm = FastMail(conf)
+    await fm.send_message(message)

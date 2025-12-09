@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import pytest
 import pytest_asyncio
 
@@ -11,6 +12,17 @@ from .factory import BusinessFactory, UserFactory
 async def auth_token(client):
     user = await UserFactory.create(password="password123", is_verified=True)
     response = await client.post("/api/v1/users/login", json={"identifier": user.email, "password": "password123"})
+=======
+import pytest, pytest_asyncio
+from app.models import Order, Product
+from .factory import UserFactory, BusinessFactory
+from app.routes.payment_route import PAYMENT_SECRET_KEY
+
+@pytest_asyncio.fixture
+async def auth_token(client):
+    user = await UserFactory.create(password="password123")
+    response = await client.post("/users/login", json={"identifier": user.email, "password": "password123"})
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     token = response.json()["access_token"]
     return token, user
 
@@ -37,9 +49,15 @@ async def test_payment_webhook_success(client):
         "order_id": str(order.id),
         "status": "SUCCESS",
         "transaction_id": "TRANS_123",
+<<<<<<< HEAD
         "secret_key": settings.PAYMENT_SECRET_KEY
     }
     response = await client.post("/api/v1/payments/webhook", json=payload)
+=======
+        "secret_key": PAYMENT_SECRET_KEY
+    }
+    response = await client.post("/payments/webhook", json=payload)
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     assert response.status_code == 200
     order_updated = await Order.get(id=order.id)
     assert order_updated.status == "PAID"
@@ -54,7 +72,11 @@ async def test_create_payment_url(client, auth_token):
         status = "PENDING"
     )
     headers = {"Authorization": f"Bearer {token}"}
+<<<<<<< HEAD
     url = f"/api/v1/payments/create-payment-url/{order.id}"
+=======
+    url = f"/payments/create-payment-url/{order.id}"
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     response = await client.post(url, headers=headers)
     assert response.status_code == 200
     assert "payment_url" in response.json()

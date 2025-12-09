@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import pytest
 import pytest_asyncio
 
@@ -7,11 +8,21 @@ from app.models.product_model import Product
 
 from .factory import BusinessFactory, UserFactory
 
+=======
+import pytest, pytest_asyncio
+from app.models.order_model import Order
+from app.models.product_model import Product
+from .factory import UserFactory, BusinessFactory
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
 
 @pytest_asyncio.fixture
 async def auth_token(client):
     user = await UserFactory.create(password="password123")
+<<<<<<< HEAD
     response = await client.post("/api/v1/users/login", json={"identifier": user.email, "password": "password123"})
+=======
+    response = await client.post("/users/login", json={"identifier": user.email, "password": "password123"})
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     token = response.json()["access_token"]
     return token, user
 
@@ -33,7 +44,11 @@ async def test_create_order_success(client, auth_token):
         "shipping_address": "123 Street"
     }
     headers = {"Authorization": f"Bearer {token}"}
+<<<<<<< HEAD
     response = await client.post("{settings.API_V1_STR}/orders/", json = payload, headers = headers)
+=======
+    response = await client.post("/orders/", json = payload, headers = headers)
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     assert response.status_code == 200
     data = response.json()
     assert data["total_amount"] == '180000'
@@ -58,5 +73,9 @@ async def test_create_order_fail(client, auth_token):
         "shipping_address": "123 Street"
     }
     headers = {"Authorization": f"Bearer {token}"}
+<<<<<<< HEAD
     response = await client.post("{settings.API_V1_STR}/orders/", json = payload, headers = headers)
+=======
+    response = await client.post("/orders/", json = payload, headers = headers)
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
     assert response.status_code == 400

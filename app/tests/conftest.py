@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 from unittest.mock import AsyncMock, patch
 
@@ -5,6 +6,14 @@ import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from tortoise import Tortoise
+=======
+import pytest
+import pytest_asyncio
+from httpx import AsyncClient, ASGITransport
+from tortoise import Tortoise
+from unittest.mock import AsyncMock, patch
+import os
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
 
 os.environ["MAIL_USERNAME"] = "test_user"
 os.environ["MAIL_PASSWORD"] = "test_password"
@@ -13,7 +22,11 @@ os.environ["MAIL_PORT"] = "587"
 os.environ["MAIL_SERVER"] = "smtp.gmail.com"
 os.environ["SECRET_KEY"] = "test_secret_key_for_jwt"
 os.environ["DATABASE_URL"] = "sqlite://:memory:"
+<<<<<<< HEAD
 from app.main import app
+=======
+from app.main import app 
+>>>>>>> f9eb3c7 (test(routers): Add pytest tests)
 
 TORTOISE_TEST_CONFIG = {
     "connections": {"default": "sqlite://:memory:"},

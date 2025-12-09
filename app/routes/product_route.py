@@ -26,7 +26,7 @@ async def create_product(
     if not business:
         raise HTTPException(status_code=404, detail="Business is not existed.")
     if business.owner_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to add product to this business.")
+        raise HTTPException(status_code=401, detail="Not authorized to add product to this business.")
     product_obj = await Product.create(
         name=product.name,
         category=product.category,

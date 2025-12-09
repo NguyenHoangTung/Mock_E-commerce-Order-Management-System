@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Business(models.Model):
     id = fields.UUIDField(pk=True, index=True)
-    name = fields.CharField(max_length=100, unique=True, null=False)
+    name = fields.CharField(max_length=100, unique=True, null=False, index=True)
     city = fields.CharField(max_length=255, null=False, default='Unspecified')
     country = fields.CharField(max_length=255, null=False, default='Unspecified')    
     business_description = fields.TextField(null=True)

@@ -11,6 +11,11 @@ app = FastAPI(title="E-commerce Order Management System", swagger_ui_parameters=
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+print("--- DEBUG ROUTER ---")
+print(f"User Router Routes: {len(user_router.routes)}")
+print(f"Product Router Routes: {len(product_router.routes)}")
+print("--------------------")
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(user_router, prefix="/users", tags=["users"])

@@ -1,6 +1,8 @@
 import asyncio
+
 from app.jobs.worker import celery
 from app.utils.email import send_verification_email
+
 
 @celery.task
 def send_verification_email_task(email: str, token: str, username: str):

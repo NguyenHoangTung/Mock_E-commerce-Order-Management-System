@@ -4,6 +4,7 @@ from app.schemas.user_schema import UserCreate, UserResponse, UserLogin, Token
 from app.utils.password import get_password_hash, verify_password
 from app.utils.token import create_access_token
 from app.utils.email import send_verification_email
+from app.jobs.tasks import send_verification_email_task
 from tortoise.exceptions import IntegrityError
 from tortoise.expressions import Q
 import uuid
@@ -23,12 +24,7 @@ async def register(user: UserCreate, background_tasks: BackgroundTasks):
             verification_token=verification_token
         )
         print(f"LOG DEBUG - Verification token generated: {verification_token}")
-        background_tasks.add_task(
-            send_verification_email,
-            email=user.email,
-            token=verification_token,
-            username=user.username
-        )
+        send_verification_email_task.delay(user.email, verification_token, user.username)
         return user_obj
     except IntegrityError:
         raise HTTPException(

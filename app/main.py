@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
+from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from tortoise.contrib.fastapi import register_tortoise
@@ -43,6 +44,10 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 register_tortoise(
     app,
     config=TORTOISE_ORM,
-    generate_schemas=False,
+    generate_schemas=True,
     add_exception_handlers=True,
 )
+
+Instrumentator().instrument(app).expose(app)
+
+

@@ -9,6 +9,7 @@ This is a comprehensive backend system for an E-commerce Order Management platfo
 * **Database:** PostgreSQL
 * **ORM:** Tortoise ORM
 * **Asynchronous Processing:** Celery, Redis
+* **Monitoring & Logging:** Prometheus, Grafana, Loki, Promtail
 * **Infrastructure:** Docker, Docker Compose
 * **Testing:** Pytest, Pytest-asyncio
 * **Authentication:** JWT (JSON Web Token)
@@ -32,17 +33,46 @@ This is a comprehensive backend system for an E-commerce Order Management platfo
 * Mock payment gateway integration.
 * Webhook implementation to handle payment status updates from external systems.
 
-### 5. Infrastructure & DevOps
+### 5. Production Monitoring
+* **Real-time Metrics:** Tracking RPS, Latency, and Error Rates via Prometheus.
+* **Centralized Logging:** Aggregating logs from all services using Loki & Promtail.
+* **Visualization:** Interactive dashboards via Grafana.
+
+### 6. Infrastructure & DevOps
 * **Dockerized Environment:** The entire stack (Web, Worker, DB, Redis) is orchestrated via Docker Compose.
 * **Clean Architecture:** Separation of concerns between Routes, Business Logic, and Data Access layers.
 
 ## System Architecture
 
-The system consists of four main containers:
+The system consists of five main containers:
 1.  **Web Service:** FastAPI application handling HTTP requests.
 2.  **Worker Service:** Celery worker processing background tasks (e.g., emails).
 3.  **Database:** PostgreSQL 15.
 4.  **Message Broker:** Redis (handling task queues).
+5.  **Observability Stack:**
+    * **Prometheus:** Scrapes metrics from FastAPI applications.
+    * **Loki:** Aggregates logs via Promtail.
+    * **Grafana:** Visualizes metrics and logs.
+
+## System Monitoring & Observability
+
+The project comes with a pre-configured monitoring stack (PLG Stack: Prometheus, Loki, Grafana).
+
+### 1. Metrics Dashboard
+Visualizes system performance including Requests Per Second (RPS), P99 Latency, and Status Codes.
+
+![Grafana Metrics Dashboard](/static/images/grafanadb.jpeg)
+<br>
+
+### 2. Centralized Logging
+Real-time log aggregation allowing deep diving into specific requests and error traces using Loki.
+
+![Grafana Logs View](/static/images/lokilog.png)
+<br>
+
+**Access Monitoring:**
+* **Grafana:** http://localhost:3000 (Default creds: admin/admin)
+* **Prometheus:** http://localhost:9090
 
 ## Setup & Installation
 
@@ -86,6 +116,7 @@ The system consists of four main containers:
 5.  **Access the Application:**
     * **Swagger UI:** http://localhost:8000/docs
     * **ReDoc:** http://localhost:8000/redoc
+    * **Grafana:** http://localhost:3000
 
 ## Testing
 

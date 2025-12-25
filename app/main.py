@@ -4,6 +4,7 @@ from tortoise.contrib.fastapi import register_tortoise
 from app.routes import user_router, business_router, upload_router, product_router, order_router, payment_router
 from fastapi.staticfiles import StaticFiles
 from .db_config import TORTOISE_ORM
+from prometheus_fastapi_instrumentator import Instrumentator
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -32,6 +33,8 @@ register_tortoise(
     generate_schemas=False,
     add_exception_handlers=True,
 )
+
+Instrumentator().instrument(app).expose(app)
 
 @app.get("/")
 async def root():

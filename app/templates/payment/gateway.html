@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FakeBank Payment Gateway</title>
+        <style>
+            body { font-family: sans-serif; text-align: center; padding: 50px; }
+            .card { border: 1px solid #ccc; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
+            .btn { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-size: 16px; margin: 5px; }
+            .btn-success { background-color: #28a745; color: white; }
+            .btn-fail { background-color: #dc3545; color: white; }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h2>FakeBank Payment</h2>
+            <p>Currently paying for Bill no.: <strong>{{ order_id }}</strong></p>
+            <p>Amount: <strong>{{ amount }} VND</strong></p>
+            <hr/>
+            <p>Do you accept to pay for this bill?</p>
+            
+            <button class="btn btn-success" onclick="confirmPayment('SUCCESS')">YES</button>
+            <button class="btn btn-fail" onclick="confirmPayment('FAILED')">NO</button>
+        </div>
+
+        <script>
+            function confirmPayment(status) {
+                fetch('/payments/webhook', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: '{{ order_id }}',
+                        status: status,
+                        transaction_id: 'TRANS_' + Math.floor(Math.random() * 1000000),
+                        secret_key: '{{ secret_key }}' 
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.close(); 
+                })
+                .catch(err => alert("Error processing payment"));
+            }
+        </script>
+    </body>
+</html>

@@ -1,5 +1,7 @@
-from tortoise import models, fields
-from . import User, Product
+from tortoise import fields, models
+
+from . import Product, User
+
 
 class Order(models.Model):
     id = fields.UUIDField(pk=True)

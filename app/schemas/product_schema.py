@@ -1,9 +1,12 @@
-from pydantic import BaseModel, Field, computed_field, ConfigDict
-from decimal import Decimal
-from typing import Optional, Any
 from datetime import datetime
+from decimal import Decimal
+from typing import Any, Optional
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, Field, computed_field
+
 from app.models import Business
+
 
 class ProductCreate(BaseModel):
     name: str = Field(..., example="Laptop")

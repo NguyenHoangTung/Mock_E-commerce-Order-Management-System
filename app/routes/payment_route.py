@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, BackgroundTasks
+import os
+
+from dotenv import load_dotenv
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 from app.models import Order, User
+from app.services.payment_service import PaymentService
 from app.utils.dependency import get_current_user
 from app.utils.email import send_confirmation_email
-from app.services.payment_service import PaymentService
-from fastapi.templating import Jinja2Templates  
-import os
-from dotenv import load_dotenv
+
 load_dotenv()
 
 PAYMENT_SECRET_KEY = os.getenv("PAYMENT_SECRET_KEY")

@@ -1,10 +1,21 @@
 import os
-from fastapi import FastAPI
-from tortoise.contrib.fastapi import register_tortoise
-from app.routes import user_router, business_router, upload_router, product_router, order_router, payment_router
-from fastapi.staticfiles import StaticFiles
-from .db_config import TORTOISE_ORM
+
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from tortoise.contrib.fastapi import register_tortoise
+
+from app.routes import (
+    business_router,
+    order_router,
+    payment_router,
+    product_router,
+    upload_router,
+    user_router,
+)
+
+from .db_config import TORTOISE_ORM
+
 load_dotenv()
 
 app = FastAPI(title="E-commerce Order Management System", swagger_ui_parameters={"persistAuthorization": True})

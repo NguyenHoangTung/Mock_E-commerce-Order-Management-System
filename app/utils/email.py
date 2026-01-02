@@ -1,8 +1,10 @@
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-from pydantic import EmailStr
-from typing import List
-from dotenv import load_dotenv
 import os
+from typing import List
+
+from dotenv import load_dotenv
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
+from pydantic import EmailStr
+
 load_dotenv()
 
 conf = ConnectionConfig(

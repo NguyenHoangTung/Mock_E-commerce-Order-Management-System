@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
+from tortoise.exceptions import IntegrityError
+
 from app.models import Business, User
 from app.schemas.business_schema import BusinessCreate, BusinessResponse
 from app.utils.dependency import get_current_user
-from tortoise.exceptions import IntegrityError
 
 router = APIRouter()
 

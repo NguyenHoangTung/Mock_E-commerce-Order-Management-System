@@ -5,13 +5,12 @@ from loguru import logger
 from tortoise.exceptions import IntegrityError
 from tortoise.expressions import Q
 
+from app.core.security import create_access_token, get_password_hash, verify_password
 from app.models import User
 from app.schemas.user_schema import Token, UserCreate, UserLogin, UserResponse
 from app.utils.email import send_verification_email
-from app.utils.password import get_password_hash, verify_password
-from app.utils.token import create_access_token
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["users"])
 
   
 @router.post("/register", response_model=UserResponse)

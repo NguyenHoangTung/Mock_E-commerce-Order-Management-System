@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
-from app.models import Product, Business
-from app.schemas.product_schema import ProductResponse, ProductUpdate, ProductCreate
-from app.utils.dependency import get_current_user
-from tortoise.expressions import Q
 from typing import Optional
 
+from fastapi import APIRouter, Depends, HTTPException
+from tortoise.expressions import Q
+
+from app.models import Business, Product
+from app.schemas.product_schema import ProductCreate, ProductResponse, ProductUpdate
+from app.utils.dependency import get_current_user
 
 
 async def get_product_and_validate_owner(product_id: str, current_user=Depends(get_current_user)) -> Product:

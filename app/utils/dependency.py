@@ -1,9 +1,11 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
+
 from app.models import User
 from app.schemas.user_schema import Token
-from .token import secret_key, algorithm
+
+from .token import algorithm, secret_key
 
 security = HTTPBearer()
 

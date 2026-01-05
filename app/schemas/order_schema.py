@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field
-from typing import List
-from uuid import UUID
 from datetime import datetime
 from decimal import Decimal
+from typing import List
+from uuid import UUID
+
+from pydantic import BaseModel, Field
+
 
 class CartItem(BaseModel):
     product_id: UUID

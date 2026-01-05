@@ -1,5 +1,7 @@
-from tortoise import fields, models
 from datetime import datetime
+
+from tortoise import fields, models
+
 
 class Business(models.Model):
     id = fields.UUIDField(pk=True, index=True)
@@ -12,3 +14,4 @@ class Business(models.Model):
     updated_at = fields.DatetimeField(auto_now=True)
     logo = fields.CharField(max_length=200, null=True)
     owner = fields.ForeignKeyField("models.User", related_name="business")
+    

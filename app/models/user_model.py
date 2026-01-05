@@ -1,5 +1,7 @@
-from tortoise import fields, models
 from datetime import datetime
+
+from tortoise import fields, models
+
 
 class User(models.Model):
     id = fields.UUIDField(pk=True, index=True)

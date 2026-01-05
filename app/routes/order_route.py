@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from tortoise.transactions import in_transaction
+
 from app.models import Order, OrderItem, Product, User
-from app.schemas.order_schema import CreateOrder, CartItemResponse, OrderResponse
+from app.schemas.order_schema import CartItemResponse, CreateOrder, OrderResponse
 from app.utils.dependency import get_current_user
 
 router = APIRouter()
@@ -50,7 +51,7 @@ async def create_order(
             ))
 
         order.total_amount = total_bill
-        await order.save(using_db=connection)
+        await order.save(using_db=connection)   
 
     return OrderResponse(
         id = order.id,

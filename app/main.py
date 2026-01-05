@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
 from app.routes import (
@@ -15,6 +16,9 @@ from app.routes import (
 )
 
 from .db_config import TORTOISE_ORM
+from .middleware import log_middleware
+
+load_dotenv()
 
 load_dotenv()
 
@@ -23,6 +27,7 @@ app = FastAPI(title="E-commerce Order Management System", swagger_ui_parameters=
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
 
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(business_router, prefix="/businesses", tags=["businesses"])

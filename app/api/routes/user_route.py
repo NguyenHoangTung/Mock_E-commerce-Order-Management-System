@@ -46,10 +46,6 @@ async def register(
         return user_obj
     except IntegrityError:
         reg_logger.warning("Registration failed: Email/Username exists")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username or email already exists."
-        )
     except Exception as e:
         reg_logger.error(f"Registration failed: {str(e)}")
         raise e
@@ -66,10 +62,7 @@ async def verify(token: str, request: Request):
     user = await User.get_or_none(verification_token=token)
     if not user:
         verify_logger.warning("Verification failed: Invalid token")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid verification token or expired."
-        )
+        return {"message": "Invalid token"}
     if user.is_verified:
         verify_logger.info("Verification skipped: Already verified")
         return {"message": "User already verified."}
@@ -94,18 +87,14 @@ async def login(
     )
     auth_logger.info("Login attempt started")
     user_obj = await User.get_or_none(Q(username=user.identifier) | Q(email=user.identifier))
-    if not user_obj or not verify_password(user.password, user_obj.password):
+    if not user_obj:
         auth_logger.warning("Login failed: Invalid credentials")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username/email or password."
-        )
+        return {"access_token": None, "token_type": "bearer"}
+    if not verify_password(user.password, user_obj.password):
+        auth_logger.warning("Login failed: Invalid credentials")
+        return {"access_token": None, "token_type": "bearer"}
     if not user_obj.is_verified:
         auth_logger.warning("Login failed: User is not verified")
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User account is not verified."
-        )
     auth_logger.success("Login successful")
     access_token = create_access_token(data={"sub": str(user_obj.id), "email": user_obj.email})
     return {"access_token": access_token, "token_type": "bearer"}

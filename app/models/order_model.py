@@ -1,6 +1,6 @@
 from tortoise import fields, models
 
-from . import Product, User
+#from . import Product, User
 
 
 class Order(models.Model):

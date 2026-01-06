@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from tortoise.exceptions import IntegrityError
 
+from app.api.deps import get_current_user
 from app.models import Business, User
 from app.schemas.business_schema import BusinessCreate, BusinessResponse
-from app.utils.dependency import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/businesses", tags=["businesses"])
 
 @router.post("/", response_model=BusinessResponse)
 async def create_business(

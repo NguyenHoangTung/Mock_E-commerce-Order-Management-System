@@ -2,18 +2,17 @@
 import os
 from datetime import datetime
 
-from dotenv import load_dotenv
 from fastapi import HTTPException
 from tortoise.transactions import atomic
 
 from app.constants import OrderStatus, PaymentStatus
+from app.core.config import settings
 from app.models import Order, User
 
-load_dotenv()
 
 class PaymentService:
     def __init__(self):
-        self.secret_key = os.getenv("PAYMENT_SECRET_KEY")
+        self.secret_key = settings.PAYMENT_SECRET_KEY
 
     async def create_payment_link(self, order_id: str, user: User) -> str:
         order = await Order.get_or_none(id=order_id, user=user)
@@ -21,7 +20,7 @@ class PaymentService:
             raise HTTPException(status_code=404, detail="The bill is not exist.")
         if order.status != OrderStatus.PENDING:
             raise HTTPException(status_code=400, detail="Payment for this bill can't be executed.")      
-        gateway_url = f"http://localhost:8000/payments/mock-gateway?order_id={order_id}&amount={order.total_amount}"
+        gateway_url = f"http://localhost:8000{settings.API_V1_STR}/payments/mock-gateway?order_id={order_id}&amount={order.total_amount}"
         return gateway_url
 
     @atomic() 

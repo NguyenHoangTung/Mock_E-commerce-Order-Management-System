@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from tortoise.transactions import in_transaction
 
+from app.api.deps import get_current_user
 from app.models import Order, OrderItem, Product, User
 from app.schemas.order_schema import CartItemResponse, CreateOrder, OrderResponse
-from app.utils.dependency import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post("/", response_model=OrderResponse)
 async def create_order(
@@ -35,7 +35,7 @@ async def create_order(
             total = price * item.quantity
             total_bill += total
 
-            order_item = await OrderItem.create(
+            await OrderItem.create(
                 order = order,
                 product = product,
                 quantity = item.quantity,

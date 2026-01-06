@@ -4,7 +4,7 @@ import uuid
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
-router = APIRouter()
+router = APIRouter(prefix="/upload", tags=["upload"])
 
 UPLOAD_DIR = "static/images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)

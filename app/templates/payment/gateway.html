@@ -24,7 +24,7 @@
 
         <script>
             function confirmPayment(status) {
-                fetch('/payments/webhook', {
+                fetch('/api/v1/payments/webhook', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

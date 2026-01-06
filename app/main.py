@@ -1,12 +1,12 @@
 import os
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from starlette.middleware.base import BaseHTTPMiddleware
-from tortoise.contrib.fastapi import register_tortoise
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.middleware.base import BaseHTTPMiddleware
+from tortoise.contrib.fastapi import register_tortoise
 
 from app.api.v1 import api_router
 from app.core.config import settings

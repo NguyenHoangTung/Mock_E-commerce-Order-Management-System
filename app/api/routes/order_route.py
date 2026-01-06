@@ -45,7 +45,7 @@ async def create_order(
             item_price = product.sale_price * item.quantity
             total_bill += item_price
 
-            await OrderItem.create(
+            order_item = await OrderItem.create(
                 order = order,
                 product = product,
                 quantity = item.quantity,

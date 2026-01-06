@@ -1,8 +1,10 @@
-from app.models.user_model import User
-from app.models.business_model import Business
-from app.utils.password import get_password_hash
-from faker import Faker
 import uuid
+
+from faker import Faker
+
+from app.core.security import get_password_hash
+from app.models.business_model import Business
+from app.models.user_model import User
 
 fake = Faker()
 

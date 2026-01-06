@@ -1,5 +1,7 @@
 import pytest
+
 from app.models.user_model import User
+
 from .factory import UserFactory
 
 
@@ -10,7 +12,7 @@ async def test_register_user(client):
         "email": "test@example.com",       
         "password": "password123"
     }
-    response = await client.post("/users/register", json=payload)
+    response = await client.post("/api/v1/users/register", json=payload)
     assert response.status_code == 200
     data = response.json()
     assert data["email"] == payload["email"]
@@ -26,7 +28,7 @@ async def test_login_user(client):
         "identifier": user.email,
         "password": password,
     }
-    response = await client.post("/users/login", json=payload)
+    response = await client.post("/api/v1/users/login", json=payload)
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data
@@ -39,5 +41,5 @@ async def test_login_wrong(client):
         "identifier": user.email,
         "password": "wrong_password"
     }
-    response = await client.post("users/login", json=payload)
+    response = await client.post("/api/v1/users/login", json=payload)
     assert response.status_code == 401

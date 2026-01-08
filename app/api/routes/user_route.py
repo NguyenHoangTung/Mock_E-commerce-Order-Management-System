@@ -89,12 +89,19 @@ async def login(
     user_obj = await User.get_or_none(Q(username=user.identifier) | Q(email=user.identifier))
     if not user_obj:
         auth_logger.warning("Login failed: Invalid credentials")
-        return {"access_token": None, "token_type": "bearer"}
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
     if not verify_password(user.password, user_obj.password):
         auth_logger.warning("Login failed: Invalid credentials")
-        return {"access_token": None, "token_type": "bearer"}
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+       
     if not user_obj.is_verified:
         auth_logger.warning("Login failed: User is not verified")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    
     auth_logger.success("Login successful")
     access_token = create_access_token(data={"sub": str(user_obj.id), "email": user_obj.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }

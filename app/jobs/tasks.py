@@ -1,5 +1,6 @@
 from asgiref.sync import async_to_sync
 from loguru import logger
+
 from app.jobs.worker import celery
 from app.utils.email import send_verification_email
 

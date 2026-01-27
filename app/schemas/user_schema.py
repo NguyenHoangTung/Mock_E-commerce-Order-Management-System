@@ -15,6 +15,7 @@ class UserResponse(BaseModel):
     email: EmailStr
     is_verified: bool
     join_date: datetime
+    verification_token: str | None = None
 
     class Config:
         from_attributes = True

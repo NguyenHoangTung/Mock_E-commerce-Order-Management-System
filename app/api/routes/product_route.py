@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -17,26 +17,38 @@ async def get_product_and_validate_owner(product_id: str, current_user=Depends(g
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-@router.post("/", response_model=ProductResponse)
+@router.post("/", response_model=List[ProductResponse])
 async def create_product(
-    product: ProductCreate,
+    product: List[ProductCreate],
     current_user=Depends(get_current_user)
 ):
-    business = await Business.get_or_none(id=product.business_id)
-    if not business:
-        raise HTTPException(status_code=404, detail="Business is not existed.")
-    if business.owner_id != current_user.id:
-        raise HTTPException(status_code=401, detail="Not authorized to add product to this business.")
-    product_obj = await Product.create(
-        name=product.name,
-        category=product.category,
-        original_price=product.original_price,
-        discount_percentage=product.discount_percentage,
-        stock=product.stock,
-        image=product.image,
-        business=business
-    )
-    return product_obj
+    created_products = []
+    business_cache = {}
+
+    for product_data in product:
+        business_id = product_data.business_id
+        if business_id not in business_cache:
+            business = await Business.get_or_none(id=business_id, owner_id=current_user.id)
+            if not business:
+                raise HTTPException(status_code=404, detail=f"Business with id {business_id} not found or not owned by user.")
+            business_cache[business_id] = business
+        else:
+            business = business_cache[business_id]
+
+        product_obj = await Product.create(
+            name=product_data.name,
+            category=product_data.category,
+            original_price=product_data.original_price,
+            discount_percentage=product_data.discount_percentage,
+            stock=product_data.stock,
+            image=product_data.image,
+            business=business
+        )
+        created_products.append(product_obj)
+
+    return created_products
+    
+
 
 @router.get("/", response_model=list[ProductResponse])
 async def get_products(
@@ -75,6 +87,8 @@ async def update_product(
     product_update: ProductUpdate,
     product: Product = Depends(get_product_and_validate_owner)
 ):
+    if product.is_active is False:
+        raise HTTPException(status_code=400, detail="Cannot update an inactive product.")
     update_data = product_update.dict(exclude_unset=True)
     for field, value in update_data.items():
         setattr(product, field, value)
@@ -89,4 +103,4 @@ async def delete_product(
 ):
     product.is_active = False
     await product.save()
-    return {"detail": "Product deleted successfully."}
+    return {"detail": f"Product {product_id} deleted successfully."}

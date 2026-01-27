@@ -17,7 +17,9 @@ class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: str = "5432"
     POSTGRES_DB: str
-    
+    CELERY_BROKER_URL: str
+    CELERY_RESULT_BACKEND: str
+
     @property
     def DATABASE_URL(self) -> str:
         return f"postgres://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.POSTGRES_DB}"

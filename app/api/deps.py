@@ -3,7 +3,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
 from app.core.config import settings
-from app.models import User
+from app.models import Product, User
 from app.schemas.user_schema import Token
 
 security = HTTPBearer()
@@ -26,3 +26,6 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     if user is None:
         raise credentials_exception
     return user
+
+
+

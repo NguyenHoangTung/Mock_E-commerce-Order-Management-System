@@ -12,6 +12,7 @@ async def create_business(
     business: BusinessCreate,
     current_user: User = Depends(get_current_user)
 ):
+    
     try:
         business_obj = await Business.create(
             name=business.name,
